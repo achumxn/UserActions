@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../Styles/SignUp.css";
-import signupImg from "../assets/signup/flower.jpeg"; // 👈 replace with your image path
+import signupImg from "../assets/signup/left.png";
 
 const SignUp = () => {
   const { login } = useAuth();
@@ -12,14 +12,14 @@ const SignUp = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfimPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (isLogin) {
-      // ✅ Login
+      // ✅ Login validations
       if (!userName || !password) {
         setError("All fields are required");
         return;
@@ -37,7 +37,7 @@ const SignUp = () => {
         setError("Invalid username or password");
       }
     } else {
-      // ✅ Signup
+      // ✅ Signup validations
       if (!userName || !email || !password || !confirmPassword) {
         setError("All fields are required");
         return;
@@ -60,13 +60,19 @@ const SignUp = () => {
 
       const storedUsers = JSON.parse(localStorage.getItem("user")) || [];
 
-      // ✅ Check for duplicate username/email
-      const userExists = storedUsers.some(
-        (u) => u.userName === userName || u.email === email
-      );
+      // ✅ Check username uniqueness
+      const usernameExists = storedUsers.some((u) => u.userName === userName);
+      if (usernameExists) {
+        setError("Username already exists. Please choose a different username.");
+        return;
+      }
 
-      if (userExists) {
-        setError("Username or Email already exists");
+      const smallEmail = email.toLowerCase();
+
+      // ✅ Check email usage limit (max 2 accounts per email)
+      const emailCount = storedUsers.filter((u) => u.email === smallEmail).length;
+      if (emailCount >= 2) {
+        setError("Please use a different email.");
         return;
       }
 
@@ -74,7 +80,7 @@ const SignUp = () => {
       const newUser = {
         id: Date.now(),
         userName,
-        email,
+        email:smallEmail,
         password,
       };
 
@@ -86,19 +92,19 @@ const SignUp = () => {
       setUserName("");
       setEmail("");
       setPassword("");
-      setConfimPassword("");
+      setConfirmPassword("");
     }
   };
 
   return (
     <div className="page-bg">
       <div className="signup-container">
-        {/* Left side image */}
+        {/* Left image */}
         <div className="left-image-signup">
           <img src={signupImg} alt="Signup visual" />
         </div>
 
-        {/* Right side form */}
+        {/* Right form */}
         <div className="form-container">
           <p className="login-header">{isLogin ? "Login" : "Sign Up"}</p>
           {error && <p className="error">*{error}</p>}
@@ -130,7 +136,7 @@ const SignUp = () => {
             <input
               type="password"
               placeholder="Confirm Password"
-              onChange={(e) => setConfimPassword(e.target.value)}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
             />
           )}
@@ -143,20 +149,14 @@ const SignUp = () => {
             {isLogin ? (
               <>
                 Don’t have an account?{" "}
-                <span
-                  onClick={() => setIsLogin(false)}
-                  className="act-btn-login"
-                >
+                <span onClick={() => setIsLogin(false)} className="act-btn-login">
                   Sign Up
                 </span>
               </>
             ) : (
               <>
                 Already signed up?{" "}
-                <span
-                  onClick={() => setIsLogin(true)}
-                  className="act-btn-login"
-                >
+                <span onClick={() => setIsLogin(true)} className="act-btn-login">
                   Login
                 </span>
               </>

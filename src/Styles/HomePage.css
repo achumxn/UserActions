@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Teko:wght@300..700&display=swap');
+
 :root {
   --primary: rgb(60, 171, 27);
   --secondary: #0d9488;
@@ -19,11 +21,13 @@ nav.navbar {
 }
 
 .logo {
-  font-family: "Helvetica", sans-serif;
-  font-size: 20px;
-  font-weight: 600;
+  font-family: "Teko", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: 35px;
+  font-weight: 500;
   color: #fff;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; */
 }
 
 .nav-links {
@@ -32,13 +36,14 @@ nav.navbar {
   gap: 30px;
 }
 
-a.nav-text {
+a.nav-text,p.nav-text {
   font-family: "Helvetica", sans-serif;
   text-transform: capitalize;
   font-weight: 500;
   text-decoration: none;
   color: #fff;
   transition: color 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .logout-btn {
@@ -56,4 +61,37 @@ a.nav-text {
 .logout-btn:hover {
   background: var(--secondary);
   color: #fff;
+}
+
+.customsearch {
+    display:flex;
+    background:#fff;
+    padding:0.5%;
+    width:50%;
+    align-items:center;
+    border-radius:4px;
+}
+
+.customsearch img {
+    height:30px;
+    object-fit:contain;
+    margin-right:5px;
+    cursor: pointer;
+}
+
+.customsearch input[type="text"] {
+    border:none;
+    outline:none;
+    width:60%;
+    height:2rem;
+    font-size:14px;
+}
+
+nav.navbar {
+    flex:1;
+}
+
+.customsearch hr {
+    margin:0px 0.2rem;
+    height:2rem;
 }

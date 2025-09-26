@@ -99,3 +99,17 @@ h2.category-title {
     margin-inline:auto;
     background:#FFF;
 }
+
+.product-card {
+    position:relative;
+}
+
+.heart-icon img {
+    height:1.5rem;
+}
+
+.heart-icon{
+    position:absolute;
+    right:7%;
+    top:5%;
+}

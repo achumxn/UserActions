@@ -5,7 +5,7 @@
 }
 
 .page-bg {
-  background: linear-gradient(135deg, #e6f3ff, #f8fbff, #ffffff);
+  background: linear-gradient(135deg, #e8f9f1, #f2fcf8, #ffffff);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -49,7 +49,7 @@
   width: 85%;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid #c2d9f0;
+  border: 1px solid #a8e6b1;
   border-radius: 8px;
   outline: none;
   font-size: 14px;
@@ -57,21 +57,21 @@
 }
 
 .form-container input:focus {
-  border: 1px solid #3b82f6; /* bright blue */
-  box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+  border: 1px solid rgb(60, 171, 27); /* bright green */
+  box-shadow: 0 0 6px rgba(60, 171, 27, 0.4);
 }
 
 p.login-header {
   font-size: 22px;
   font-weight: bold;
-  color: #1e3a8a; /* dark blue */
+  color: #14532d; /* dark green */
   margin-bottom: 10px;
 }
 
 .signup-btn {
   width: 85%;
   height: 42px;
-  background: linear-gradient(135deg, #3b82f6, #60a5fa); /* blue gradient */
+  background: rgb(60, 171, 27);/* green gradient */
   color: white;
   font-size: 15px;
   font-weight: 500;
@@ -82,7 +82,7 @@ p.login-header {
 }
 
 .signup-btn:hover {
-  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  /* background: linear-gradient(135deg, #4ade80, rgb(60, 171, 27)); */
   transform: translateY(-2px);
 }
 
@@ -93,14 +93,14 @@ p.login-header {
 }
 
 .login-text .act-btn-login {
-  color: #3b82f6;
+  color: rgb(60, 171, 27);
   font-weight: 600;
   cursor: pointer;
   transition: color 0.3s;
 }
 
 .login-text .act-btn-login:hover {
-  color: #2563eb; /* deeper blue */
+  color: #15803d; /* deeper green */
 }
 
 .error {

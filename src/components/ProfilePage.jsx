@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../Styles/ProfilePage.css";
@@ -12,8 +12,7 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-
-  const [editedUser, setEditedUser] = useState(user);
+  const [editedUser, setEditedUser] = useState(user || { userName: "", email: "" });
 
   // password states
   const [oldPassword, setOldPassword] = useState("");
@@ -21,24 +20,52 @@ const ProfilePage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
+  // Sync editedUser when user changes (for example, after login)
+  useEffect(() => {
+    if (user) setEditedUser(user);
+  }, [user]);
+
   if (!user) {
     return <p>No user logged in. Please log in first.</p>;
   }
 
-  // ✅ Handle profile input change
+  // Handle profile input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Save profile changes
+  // Save profile changes
   const saveChanges = () => {
-    updateUser(editedUser);
+    const storedUsers = JSON.parse(localStorage.getItem("user")) || [];
+
+    // Check username uniqueness (excluding current user)
+    const usernameExists = storedUsers.some(
+      (u) => u.userName === editedUser.userName && u.id !== user.id
+    );
+    if (usernameExists) {
+      setError("Username already exists. Choose a different one.");
+      return;
+    }
+
+    // Check email usage limit (max 2 accounts per email, excluding current user)
+    const smallEmail = editedUser.email.toLowerCase();
+    const emailCount = storedUsers.filter(
+      (u) => u.email === smallEmail && u.id !== user.id
+    ).length;
+    if (emailCount >= 2) {
+      setError("This email is already used for 2 accounts. Please use a different email.");
+      return;
+    }
+
+    // Update user
+    updateUser({ ...editedUser, email: smallEmail });
     setIsEditing(false);
+    setError("");
     alert("Profile updated successfully!");
   };
 
-  // ✅ Save password changes
+  // Save password changes
   const savePassword = () => {
     if (oldPassword !== user.password) {
       setError("Old password is incorrect");
@@ -57,19 +84,18 @@ const ProfilePage = () => {
     setOldPassword("");
     setNewPassword("");
     setConfirmPassword("");
-
     setIsChangingPassword(false);
     setError("");
     alert("Password updated successfully!");
   };
 
-  // ✅ Delete user account
+  // Delete user account
   const handleDelete = () => {
     deleteUser();
     navigate("/"); // redirect to signup/login
   };
 
-  // ✅ Logout
+  // Logout
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -77,12 +103,12 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <div className="profile-container">
         <div className="profile-info">
-          {/* ---------------- Profile Edit Mode ---------------- */}
           {isEditing ? (
             <>
+              {error && <p className="error">* {error}</p>}
               <input
                 type="text"
                 name="userName"
@@ -110,7 +136,6 @@ const ProfilePage = () => {
               </div>
             </>
           ) : isChangingPassword ? (
-            /* ---------------- Change Password Mode ---------------- */
             <>
               {error && <p className="error">* {error}</p>}
               <input
@@ -150,7 +175,6 @@ const ProfilePage = () => {
               </div>
             </>
           ) : confirmDelete ? (
-            /* ---------------- Confirm Delete Mode ---------------- */
             <div className="delete-confirm">
               <p>Are you sure you want to delete your account?</p>
               <div className="dlt-confirm">
@@ -166,7 +190,6 @@ const ProfilePage = () => {
               </div>
             </div>
           ) : (
-            /* ---------------- Default View Mode ---------------- */
             <>
               <h2 className="username">{user.userName}</h2>
               <p className="email">{user.email}</p>

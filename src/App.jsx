@@ -7,6 +7,8 @@ import { BrowserRouter, Route, Router, Routes } from 'react-router-dom'
 import ProfilePage from './components/ProfilePage'
 import Home from './components/Home'
 import ProductsPage from './components/ProductsPage'
+import Wishlist from './components/Wishlist'
+import Pagination from './components/Pagination'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -19,6 +21,8 @@ function App() {
             <Route path="/home" element={<Home />}></Route>
             <Route path="/profile" element={<ProfilePage/>}></Route>
             <Route path="/products" element={<ProductsPage/>}></Route>
+            <Route path ="/wishlist" element={<Wishlist/>}></Route>
+            <Route path="/allproducts" element={<Pagination/>}></Route>
           </Routes>
       </BrowserRouter>
     </>
